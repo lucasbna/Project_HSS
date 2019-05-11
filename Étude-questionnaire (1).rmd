@@ -1,0 +1,295 @@
+---
+title: "Résulats sondage"
+author: "Lucas Ben Arous, Adèle Berlioz, Solène Metayer, Gabriel Franz"
+date: "4/22/2019"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+Importation des packages nécessaires
+```{r}
+#install.packages("factoextra")
+#install.packages("cluster")
+#install.packages("magrittr")
+library("cluster")
+library("factoextra")
+library("magrittr")
+library("FactoMineR")
+```
+
+Gestion des données : (toutes les données sont des factors dans myDatafactor)
+
+```{r}
+myData = read.csv('/Users/adeleberlioz/Downloads/results-survey2.csv', header = TRUE, sep=";", fill = TRUE, na.strings = ' ')
+
+myData$Opinion...art<- replace(myData$Opinion...art,myData$Opinion...art<=2,1)
+myData$Opinion...art<- replace(myData$Opinion...art,myData$Opinion...art>=4,5)
+
+myData$Opinion...divertissement<- replace(myData$Opinion...divertissement,myData$Opinion...divertissement<=2,1)
+myData$Opinion...divertissement<- replace(myData$Opinion...divertissement,myData$Opinion...divertissement>=4,5)
+
+myData$Opinion...enrichissement.personnel<-replace(myData$Opinion...enrichissement.personnel,myData$Opinion...enrichissement.personnel<=2,1)
+myData$Opinion...enrichissement.personnel<-replace(myData$Opinion...enrichissement.personnel,myData$Opinion...enrichissement.personnel>=4,5)
+
+myData$Opinion...vecteur.d.intégration.sociale<-replace(myData$Opinion...vecteur.d.intégration.sociale,myData$Opinion...vecteur.d.intégration.sociale<=2,1)
+myData$Opinion...vecteur.d.intégration.sociale<-replace(myData$Opinion...vecteur.d.intégration.sociale,myData$Opinion...vecteur.d.intégration.sociale>=4,5)
+
+myData$Difficulté.à.s.arrêter<- replace(myData$Difficulté.à.s.arrêter,myData$Difficulté.à.s.arrêter<=2,1)
+myData$Difficulté.à.s.arrêter<- replace(myData$Difficulté.à.s.arrêter,myData$Difficulté.à.s.arrêter>=4,5)
+
+myData$Structure.me.pousse.à.jouer<- replace(myData$Structure.me.pousse.à.jouer,myData$Structure.me.pousse.à.jouer<=2,1)
+myData$Structure.me.pousse.à.jouer<- replace(myData$Structure.me.pousse.à.jouer,myData$Structure.me.pousse.à.jouer>=4,5)
+
+myDatafactor = read.csv('/Users/adeleberlioz/Downloads/results-survey2.csv', header = TRUE, sep=";", fill = TRUE, na.strings = ' ')
+myDatafactor$Opinion...art = as.factor(myDatafactor$Opinion...art)
+myDatafactor$Opinion...divertissement = as.factor(myData$Opinion...divertissement)
+myDatafactor$Opinion...enrichissement.personnel = as.factor(myData$Opinion...enrichissement.personnel)
+myDatafactor$Opinion...vecteur.d.intégration.sociale = as.factor(myData$Opinion...vecteur.d.intégration.sociale)
+myDatafactor$Difficulté.à.s.arrêter = as.factor(myData$Difficulté.à.s.arrêter)
+myDatafactor$Structure.me.pousse.à.jouer = as.factor(myData$Structure.me.pousse.à.jouer)
+#View(myData)
+#View(myDatafactor$Opinion...art)
+```
+
+MCA 
+mise en corrélation de :les jeux vidéos transmettent-ils des opinions avec :
+- âge de début
+- pratique des jeux interdits pour son âge
+c(22,30,49)
+
+Types de jeux, fréquence de jeux, supports
+c(11,12,13,14,15,16,18,19,20,21)
+-> conculsion difficile
+
+00.Difficulté à s'arrêter,la structure me pousse à jouer
+c(43,44)
+on peut rapidement mettre en rapport : les personnes qui reconnaissent la difficulté à s'arrêter, reconnaisent la présence d'une structure
+
+0.Pourquoi tu joues trop longtemps,Difficulté à s'arrêter,la structure me pousse à jouer
+c(41,43,44)
+
+1. Fréquence, tendance des personnes à jouer plus que prévu
+c(11,40)
+difficile de conclure
+
+2. Supports, tendance des personnes à jouer plus que prévu
+c(18,19,20,21,40)
+Difficile de conclure
+
+3. Types de jeux, tendance des personnes à jouer plus que prévu
+c(12,13,14,15,16,40)
+Difficile de conclure
+
+4. Types de jeux, des difficultés à s'arrêter
+c(12,13,14,15,16,43)
+Difficile de conclure
+
+5. Types de support, incitation (seul ou entre amis)
+c(18,19,20,21,39)
+Corrélation Ordi/seul et console sur télé/invitation extérieur
+
+6. Types de support,des difficultés à s'arrêter
+c(18,19,20,21,43)
+Difficile de conclure
+
+7. Tendance des personnes à jouer plus, reconnaissance d'avoir des difficultés à s'arrêter,existence structures créées par développeurs, mécanismes existent
+c(40,43,44)
+Difficile de conclure
+
+8. Reconnaissance d'avoir des difficultés à s'arrêter,existence structures créées par développeurs
+c(43,44)
+Apparaîssent corrélées positivement
+
+
+9.Existence structures créées par développeurs, il existe des mécanismes
+c(44,47)
+Résultat : 
+ Structure.me.pousse.à.jouer Mécanismes.existent
+ 1:18                        Non: 27            
+ 2:43                        Oui:219            
+ 3:66                                           
+ 4:75                                           
+ 5:44    
+ 
+ 10. Incitation, tendance à jouer plus que prévu
+ c(39,40)
+ Jouer seul apparaît être davantage corrélé avec la tendance à jouer plus
+ 
+11. Incitation, des difficultés à s'arreter
+ c(39,43)
+ Difficulté à s'arrêter importante liée avec jouer en groupe (mais corrélation moins importante que pour la précéndente)
+ 
+12. Incitation, tendance à jouer plus que prévu, des difficultés à s'arreter
+c(39,40,43)
+Même incohérence que ce qui est relevé dans la question précendente
+
+13. Incitation, fréquence de jeux
+c(11,39)
+Difficile de conclure
+
+14. Opinion sur les jeux vidéo
+c(32,33,34,35)
+Les avis très positif (art, enrichissement personnel, facteur d'intégration sociale) paraissent corrélés
+
+15. Fréquence, opinion sur les jeux vidéo
+c(11,32,33,34,35)
+16.Fréquence, enrichissement personnel
+c(11,33)
+enrichissement personnel 5 lié à pratique très régulière des jeux vidéo
+17.Fréquence, vecteur d'intégration sociale
+c(11,34)
+vecteur d'intégration sociale 5 lié à pratique très régulière des jeux vidéo
+18.Fréquence, Art
+c(11,35)
+Art 5 lié à pratique très régulière des jeux vidéo
+
+19.Age de début de la pratique de jeux / opinions sur les jeux vidéo
+19a Age de début de la pratique de jeux, enrichissement personnel
+c(22,33)
+enrichissement personnel 5 corrélé à primaire
+
+19b. Age de début de la pratique de jeux, vecteur d'intégration sociale
+c(22,34)
+pas de conclusion
+
+19c. Age de début de la pratique de jeux, Art
+c(22,35)
+Art 5 rapidement corrélé à primaire
+
+20. Age de début de la pratique de jeux, influence des jeux vidéo
+c(22,55)
+Sentiment d'influence important quand commence primaire
+
+21. Age de début de la pratique de jeux,contrôle parental
+c(22,23)
+conclusion difficile
+
+22. Age de début de la pratique de jeux, influence des jeux vidéo, contrôle parental
+c(22,23,55)
+conclusion difficile
+
+23.la fréquence de jeux vidéo et l’influence des jeux vidéos sur le joueur
+c(11,55)
+influence paraît corrélée avec fréquence importante de la pratique des jeux vidéo et anticorrélée avec une faible pratique
+
+24.Types de jeux, Influence
+c(12,13,14,15,16,55)
+Difficile de conclure
+
+25. Opinions sur les jeux vidéo/ influence
+25a. influence, enrichissement personnel
+c(33,55)
+Influence corrélée avec enrichissement personnel important
+25b. influence, vecteur d'intégration sociale
+c(34,55)
+difficile de conclure
+25c. influence, art
+c(35,55)
+Influence corrélée avec art 5
+
+26. opinions 
+c(50,51,52)
+De manière globale, normes sociales et morales très corrélées, un peu moins avec normes politiques mais une corrélation entre les trois types d'idée existe
+
+27. Opinions sur les jeux vidéos / Idées exprimées dans les jeux vidéo.
+27a enrichissement personnel, Idées exprimées dans les jeux
+c(33,50,51,52)
+Les personnes qui pensent que les jeux vidéo sont un facteur d'enrichissement personnel pensent que les jeux vidéo expriment des idées sociales, politiques et morales.
+27b intégration sociale idées jeux
+c(34,50,51,52)
+pas de conclusion
+27c Art idées exprimées dans les jeux
+c(35,50,51,52)
+conclusion difficile
+
+28. Influence passée, des structures existent
+c(55,44)
+conclusion difficile car représentation approximative
+
+29. Opinions sur les jeux vidéo des structures existent
+29a enrichissement personnel, des structures existent
+c(33,44)
+conclusion difficile
+29b intégration sociale, des structures existent
+c(34,44)
+conclusion difficile
+29c Art des structures existent
+c(35,44),
+conclusion difficile
+
+30. Avis limite d'âge, influence
+c(55,31)
+conclusion difficile
+```{r}
+myDatafactor.active <- myDatafactor[1:246,   c(39,43)]
+
+#myDatafactor.active<- subset(myDatafactor.active,  myDatafactor.active$Influencé.par.le.passé..!= "N/A")
+summary(myDatafactor.active)
+
+res.mca <- MCA (myDatafactor.active, 2, graph = FALSE)
+print(res.mca)
+
+#proportion des variances retenues par les différentes dimensions (axes)
+#eig.val <- get_eigenvalue(res.mca)
+#head(eig.val)
+
+#visualisation des résultats des individus (bof efficace)
+#fviz_mca_ind(res.mca, col.ind = "cos2", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel = TRUE, ggtheme = theme_minimal())
+# Cos2 des individus
+#fviz_cos2(res.mca, choice = "ind", axes = 1:2, top = 20)
+# Contribution des individus aux dimensions
+#fviz_contrib(res.mca, choice = "ind", axes = 1:2, top = 20)
+
+#visualisation des résultats des variables :
+#Les catégories avec un profil similaire sont regroupées.
+#Les catégories corrélées négativement sont positionnées sur les côtés opposés de l’origine du graphique (quadrants opposés).
+#La distance entre les catégories et l’origine mesure la qualité des catégories. Les points qui sont loin de l’origine sont bien représentés par l’ACM.
+#fviz_mca_var(res.mca)
+
+#Création d’un biplot des individus et des variables
+fviz_mca_biplot (res.mca, repel = TRUE,ggtheme = theme_minimal())
+
+
+# extraire les résultats pour les catégories des variables.
+var <- get_mca_var(res.mca)
+
+# Coordonnées
+#Si une catégorie d’une variable donnée est bien représentée par deux dimensions, la somme des cos2 est proche de 1. Pour certains éléments, plus de 2 dimensions sont nécessaires pour représenter parfaitement les données.
+#head(var$coord)
+# Colorer en fonction du cos2 (en plus de la visualisation des variables)
+#   - les variables à faible valeur de cos2 seront colorées en “white” (blanc)
+#   - les variables avec des valeurs moyennes de cos2 seront colorées en “blue” (bleu)
+#   - les variables avec des valeurs élevées de cos2 seront colorées en “red” (rouge)
+fviz_mca_var(res.mca, col.var = "cos2",gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),  repel = TRUE, ggtheme = theme_minimal())
+
+# Cos2: Qualité de représentation des catégories des variables
+#head(var$cos2)
+
+# Contributions aux axes
+#head(var$contrib)
+# Contributions des variables à la dimension 1
+fviz_contrib (res.mca, choice = "var", axes = 1, top = 15)
+# Contributions des variables à la dimension 2
+fviz_contrib (res.mca, choice = "var", axes = 2, top = 15)
+
+
+# corrélation entre les variables (ici, jeux véhiculent des opinions, dépassement limite d'âge, quand as-tu commencer à jouer) et les axes principaux 
+#permet d’identifier les variables les plus corrélées avec chaque axe. Les corrélations au carré entre les variables et les axes sont utilisées comme coordonnées.
+#fviz_mca_var (res.mca, choice = "mca.cor",repel = TRUE, ggtheme = theme_minimal ())
+
+# Autre méthode (à éviter selon moi) Les catégories les plus importantes peuvent être mises en évidence sur le graphique comme suit :
+#fviz_mca_var(res.mca, col.var = "contrib",gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE, ggtheme = theme_minimal())
+
+
+#Description des dimensions
+#La fonction dimdesc() [FactoMineR] peut être utilisée pour identifier les variables les plus corrélées avec une dimension donnée:
+#res.desc <- dimdesc (res.mca, axes = c(1,2))
+# Description de la dimension 1
+#res.desc[[1]]
+# Description de la dimension 2
+#res.desc[[2]]
+```
